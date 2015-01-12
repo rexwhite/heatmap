@@ -28,30 +28,65 @@ var col = row.selectAll('rect')
     .attr('y', .5)
     .attr('transform', function (d, i) {return 'translate(' + i * (cellWidth) + ' ,0)';})
     .style({'stroke-width': 1, 
-            'stroke': 'rgb(255,255,255)'})
-    .style('fill', function (d) {return mapColor(d);});
+            'stroke': d3.rgb('black')})
+    .style('fill', function (d, i, j) { return (i == 0 || j == 0) ? d3.rgb('white') : mapColor(d);});
 
 var text = row.selectAll('text')
     .data(function (d) {return d;})
     .enter().append('text')
     .attr('transform', function (d, i) {return 'translate(' + i * (cellWidth) + ' ,0)';})
-    .text(function (d) {return (d < 1) ? d.toPrecision(3) : d.toPrecision(4);})
+    .text(function (d, i, j) {
+            if (i ==0 && j == 0) {
+                return null;
+            }
+
+            else if (i == 0 || j == 0) {
+                return d.toFixed();
+            }
+
+            else {
+                return (d < 1) ? d.toPrecision(2) : d.toPrecision(3);
+            }})
     .attr('y', 18)
-    .attr('x', 8)
-    .style({'fill': function (d) {return fontColor(d);}, 
-            'font': '10px sans-serif'});
+    .attr('x', 6)
+    .style({'fill': function (d, i, j) {return (i == 0 || j == 0) ? d3.rgb('black') : fontColor(d);},
+            'font': '11 px sans-serif'});
 
 
 function generateArray () {
-    var row, cell, cpus, appliances;
-    var data = [];
+    var maxCPUs = 64;
+    var cpuStep = 2;
+    var maxAppliances = 50;
 
-    for (appliances = 1; appliances <= 50; appliances++) {
+    var cell, cpus, appliances;
+    var data = [];
+    var row = [];
+
+    // create header row...
+    row = [];
+
+    // top left corner of table is an empty cell
+    row.push(0);
+
+    for (cpus = 2; cpus <= maxCPUs; cpus += cpuStep) {
+        row.push(cpus);
+    }
+
+    data.push(row);
+
+    // create table body...
+    for (appliances = 1; appliances <= maxAppliances; appliances++) {
         row = [];
-        for (cpus = 2; cpus <= 32; cpus++) {
+
+        // add "axis" column
+        row.push(appliances);
+
+        // create data cells
+        for (cpus = 2; cpus <= maxCPUs; cpus += cpuStep) {
             cell = 0.435 * 20 / cpus * appliances;
             row.push( (cell < 100) ? cell : 100 );
         }
+
         data.push(row);
     }
 
