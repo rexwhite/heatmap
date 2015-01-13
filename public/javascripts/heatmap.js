@@ -47,8 +47,8 @@ var text = row.selectAll('text')
             else {
                 return (d < 1) ? d.toPrecision(2) : d.toPrecision(3);
             }})
-    .attr('y', 18)
-    .attr('x', 6)
+    .attr('y', 20)
+    .attr('x', function (d, i, j) { return (i == 0 || j == 0) ? 12 : 6})
     .style({'fill': function (d, i, j) {return (i == 0 || j == 0) ? d3.rgb('black') : fontColor(d);},
             'font': '11 px sans-serif'});
 
