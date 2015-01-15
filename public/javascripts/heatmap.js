@@ -37,17 +37,18 @@ var text = row.selectAll('text')
     .enter().append('text')
     .attr('transform', function (d, i) {return 'translate(' + i * (cellWidth) + ' ,0)';})
     .text(function (d, i, j) {
-            if (i ==0 && j == 0) {
-                return null;
-            }
+        if (i ==0 && j == 0) {
+            return null;
+        }
 
-            else if (i == 0 || j == 0) {
-                return d.toFixed();
-            }
+        else if (i == 0 || j == 0) {
+            return d.toFixed();
+        }
 
-            else {
-                return (d < 1) ? d.toPrecision(2) : d.toPrecision(3);
-            }})
+        else {
+            return (d < 1) ? d.toPrecision(2) : d.toPrecision(3);
+        }
+    })
     .attr('y', 18)
     .attr('x', function (d, i, j) { return (i == 0 || j == 0) ? 12 : 6})
     .style({'fill': function (d, i, j) {return (i == 0 || j == 0) ? d3.rgb('black') : fontColor(d);},
@@ -96,7 +97,13 @@ function generateArray () {
 
 
 function mapColor (x) {
-    if (x > 100) x = 100;
+    if (x > 100) {
+        x = 100;
+    }
+
+    if (x < 0) {
+        x = 0;
+    }
 
     var yellow = d3.hsl(60, 1, 0.55);
     var red = d3.hsl(0, 1, 0.40);
@@ -115,6 +122,7 @@ function mapColor (x) {
         return d3.interpolateHsl(yellow, red)(x);
     }
 };
+
 
 function fontColor(x) {
     var rgb = d3.rgb(mapColor(x));
