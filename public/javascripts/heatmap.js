@@ -29,7 +29,7 @@ var col = row.selectAll('rect')
     .attr('y', .5)
     .attr('transform', function (d, i) {return 'translate(' + i * (cellWidth) + ' ,0)';})
     .style({'stroke-width': 1, 
-            'stroke': d3.rgb('black')})
+            'stroke': function (d, i, j) { return (i == 0 && j == 0) ? d3.rgb('white') : d3.rgb('black'); }})
     .style('fill', function (d, i, j) { return (i == 0 || j == 0) ? d3.rgb('white') : mapColor(d);});
 
 var text = row.selectAll('text')
